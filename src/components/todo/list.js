@@ -5,12 +5,13 @@ function TodoList (props) {
     <ul>
       {props.list.map(item => (
         <li
-          className={`complete-${item.complete.toString()}`}
+          className={`complete-${item.status}`}
           key={item._id}
-        >
+        > 
+          <span onClick={() => props.deleteOnClick(item._id)}>X</span>
           <span onClick={() => props.handleComplete(item._id)}>
           Assignee: {item.assignee}
-            <span>Task: {item.text}</span>
+            <span>Task: {item.item}</span>
           </span>
         </li>
       ))}
