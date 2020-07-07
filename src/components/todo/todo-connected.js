@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import TodoForm from './form.js';
 import TodoList from './list.js';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+
+import { SettingsContext } from '../../context/settings.js';
 
 import './todo.scss';
 import useAjax from '../../hooks/use-ajax.js';
@@ -13,7 +15,7 @@ const todoAPI = 'https://api-js401.herokuapp.com/api/v1/todo';
 const ToDo = () => {
 
   const [list, setList] = useState([]);
-
+  const siteContext = useContext(SettingsContext)
   const _addItem = (item) => {
     item.due = new Date();
     useAjax(todoAPI, 'post', item)
@@ -33,7 +35,6 @@ const ToDo = () => {
     useAjax(url, 'put', item, item._id)
       .then(response => response.json())
       .then(savedItem => {
-        console.log(savedItem.status)
         setList(list.map(listItem => listItem._id === item._id ? savedItem : listItem));
       })
       .catch(console.error);
@@ -48,7 +49,6 @@ const ToDo = () => {
         _getTodoItems();
       })
       .catch(console.error);
-
   };
 
   const _getTodoItems = () => {
@@ -58,10 +58,28 @@ const ToDo = () => {
         data.results.map(item => {
           item.complete = false;
         })
+
         setList(data.results);
+
       })
       .catch(console.error);
   };
+
+  const indexOfLastItem = siteContext.currentPage * siteContext.itemsPerPage;
+
+  const indexOfFirstItem = indexOfLastItem - siteContext.itemsPerPage;
+
+  list.sort((a, b) => {
+    return Number(a.difficulty) - Number(b.difficulty);
+  });
+  
+
+  const currentPagePosts = list.slice(indexOfFirstItem, indexOfLastItem);
+
+  const numberOfPages = (list.length) / (siteContext.itemsPerPage);
+
+  siteContext.changeNumberOfPages(numberOfPages);
+
 
   useEffect(_getTodoItems, []);
 
@@ -91,9 +109,10 @@ const ToDo = () => {
 
         <div>
           <TodoList
-            list={list}
+            list={currentPagePosts}
             handleComplete={_toggleComplete}
             deleteOnClick={_deleteTodoItem}
+            fetchPageItems={_getTodoItems}
           />
         </div>
       </section>
