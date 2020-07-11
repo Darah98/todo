@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import useForm from '../../hooks/use-form.js';
-
-import { SettingsContext } from '../../context/settings.js';
+import { LoginContext } from '../../context/login-auth.js';
+import LoginForm from './login-form.js';
 
 function TodoForm(props) {
   const [item, handleInputChange, handleSubmit] = useForm(props);
+  // const loginContext = useContext(LoginContext);
+
   return (
     <>
+      
       <Form onSubmit={handleSubmit}>
         <Form.Group >
           <Form.Label><span>To Do Item</span>
@@ -31,11 +34,16 @@ function TodoForm(props) {
           </Form.Label>
         </Form.Group>
         <Button variant="primary" type="submit">
-          Add Item
+            Add Item
         </Button>
+
       </Form>
+
+      
+
     </>
   );
+       
 }
 
 export default TodoForm;
