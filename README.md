@@ -1,10 +1,10 @@
-# LAB - Class 31
+# LAB - Class 33
 
 ### Author: Darah
 
 ### Links and Resources
 
-- [submission PR](https://github.com/Darah98/todo/pull/1)
+- [submission PR](https://github.com/Darah98/todo/pull/3)
 
 
 #### How to initialize/run your application
